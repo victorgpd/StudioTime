@@ -1,10 +1,12 @@
 import { RoutesEnum } from "../enums/routes";
 import type { RouteObject } from "react-router-dom";
 
+import Screen from "../components/Screen";
+
 export const screensRoutes: RouteObject[] = [
   {
     path: RoutesEnum.Home,
-    element: <div>Home</div>,
+    element: <Screen />,
     errorElement: <div>404</div>,
     children: [
       {
@@ -26,7 +28,7 @@ export const screensRoutes: RouteObject[] = [
 export const loggedScreensRoutes: RouteObject[] = [
   {
     path: RoutesEnum.Home,
-    element: <div>Home</div>,
+    element: <Screen />,
     children: [
       {
         path: RoutesEnum.Painel,
