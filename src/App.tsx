@@ -1,7 +1,18 @@
+import { loggedScreensRoutes, screensRoutes } from "./routes/AppRoutes";
+import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router-dom";
+
 function App() {
+  const routes: RouteObject[] = [...screensRoutes];
+  const routesLogged: RouteObject[] = [...loggedScreensRoutes].map((route) => ({
+    ...route,
+    // loader: verifyLoggedIn,
+  }));
+
+  const router = createBrowserRouter([...routes, ...routesLogged]);
+
   return (
     <>
-      <h1>App</h1>
+      <RouterProvider router={router} />
     </>
   );
 }
