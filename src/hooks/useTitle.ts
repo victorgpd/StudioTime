@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-function useDocumentTitle(title: string) {
+function useTitle(title: string) {
   useEffect(() => {
     const previousTitle = document.title;
     document.title = `${title} | StudioTime`;
@@ -11,4 +11,4 @@ function useDocumentTitle(title: string) {
   }, [title]);
 }
 
-export default useDocumentTitle;
+export default useTitle;
