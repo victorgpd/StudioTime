@@ -4,6 +4,7 @@ import type { RouteObject } from "react-router-dom";
 import Screen from "../components/Screen";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import PhoneVerification from "../pages/PhoneVerification";
 
 export const screensRoutes: RouteObject[] = [
   {
@@ -35,6 +36,10 @@ export const loggedScreensRoutes: RouteObject[] = [
       {
         path: RoutesEnum.Painel,
         element: <div>Painel</div>,
+      },
+      {
+        path: RoutesEnum.PhoneVerification,
+        element: <PhoneVerification />,
       },
     ],
   },
