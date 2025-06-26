@@ -18,6 +18,7 @@ import {
 } from "./styles";
 import { useEffect, useState } from "react";
 import useTitle from "../../hooks/useTitle";
+import { useAuth } from "../../hooks/useAuth";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,13 +26,12 @@ const Login = () => {
   useTitle("Login");
   const navigate = useNavigate();
 
+  const { login, loading, error } = useAuth(navigate);
+
   const [userInputs, setUserInputs] = useState({
     email: "",
     password: "",
   });
-
-  const error = "";
-  const loading = false;
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [wasSubmitted, setWasSubmitted] = useState(false);
@@ -66,6 +66,8 @@ const Login = () => {
     setWasSubmitted(true);
 
     if (!isFormValid) return;
+
+    await login(userInputs.email, userInputs.password);
   };
 
   return (
