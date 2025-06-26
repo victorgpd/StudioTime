@@ -17,11 +17,13 @@ import {
 } from "./styles";
 import { Select } from "antd";
 import { useEffect, useState } from "react";
+import useTitle from "../../hooks/useTitle";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
 
 const Register = () => {
+  useTitle("Cadastro");
   const navigate = useNavigate();
 
   const [userInputs, setUserInputs] = useState({

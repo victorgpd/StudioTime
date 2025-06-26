@@ -17,10 +17,12 @@ import {
   LoginTitle,
 } from "./styles";
 import { useEffect, useState } from "react";
+import useTitle from "../../hooks/useTitle";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login = () => {
+  useTitle("Login");
   const navigate = useNavigate();
 
   const [userInputs, setUserInputs] = useState({
