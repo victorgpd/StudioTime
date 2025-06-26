@@ -15,9 +15,9 @@ import {
   RegisterTextLoginLink,
   RegisterTitle,
 } from "./styles";
-import { Select } from "antd";
 import { useEffect, useState } from "react";
 import useTitle from "../../hooks/useTitle";
+import { useAuth } from "../../hooks/useAuth";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
@@ -31,15 +31,13 @@ const Register = () => {
     email: "",
     password: "",
     phone: "",
-    role: "",
   });
-
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [wasSubmitted, setWasSubmitted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const { register, loading, error } = useAuth(navigate);
 
   useEffect(() => {
     const newErrors: Record<string, string> = {};
@@ -58,10 +56,6 @@ const Register = () => {
 
     if (!userInputs.phone || !PHONE_REGEX.test(userInputs.phone)) {
       newErrors.phone = "Telefone inválido. Ex: (11) 91234-5678";
-    }
-
-    if (!userInputs.role) {
-      newErrors.role = "Selecione o tipo de perfil.";
     }
 
     setFieldErrors(newErrors);
@@ -92,6 +86,8 @@ const Register = () => {
     setWasSubmitted(true);
 
     if (!isFormValid) return;
+
+    await register({ phone: userInputs.phone, name: userInputs.name, email: userInputs.email }, userInputs.password);
   };
 
   return (
@@ -143,22 +139,6 @@ const Register = () => {
               status={wasSubmitted && fieldErrors.phone ? "error" : ""}
             />
             {wasSubmitted && fieldErrors.phone && <RegisterTextError>{fieldErrors.phone}</RegisterTextError>}
-          </RegisterFormItem>
-
-          <RegisterFormItem>
-            <RegisterFormTitle htmlFor="role">Tipo de perfil</RegisterFormTitle>
-            <Select
-              style={{ width: "100%" }}
-              placeholder="Selecione uma opção"
-              value={userInputs.role || undefined}
-              onChange={(value) => setUserInputs({ ...userInputs, role: value })}
-              status={wasSubmitted && fieldErrors.role ? "error" : ""}
-              options={[
-                { label: "Fotógrafo", value: "photographer" },
-                { label: "Assistente", value: "assistant" },
-              ]}
-            />
-            {wasSubmitted && fieldErrors.role && <RegisterTextError>{fieldErrors.role}</RegisterTextError>}
           </RegisterFormItem>
 
           <RegisterFormButton variant="solid" color="blue" htmlType="submit" loading={loading}>
