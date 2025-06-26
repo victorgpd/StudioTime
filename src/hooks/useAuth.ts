@@ -44,8 +44,6 @@ export const useAuth = (navigate: NavigateFunction) => {
         displayName: user.name,
       });
 
-      localStorage.setItem("phone", user.phone);
-
       navigate(RoutesEnum.Painel);
       return userCredential.user;
     });

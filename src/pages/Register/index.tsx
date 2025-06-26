@@ -20,7 +20,6 @@ import useTitle from "../../hooks/useTitle";
 import { useAuth } from "../../hooks/useAuth";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
 
 const Register = () => {
   useTitle("Cadastro");
@@ -30,7 +29,6 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    phone: "",
   });
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -54,30 +52,16 @@ const Register = () => {
       newErrors.password = "A senha deve ter ao menos 6 caracteres.";
     }
 
-    if (!userInputs.phone || !PHONE_REGEX.test(userInputs.phone)) {
-      newErrors.phone = "Telefone inválido. Ex: (11) 91234-5678";
-    }
-
     setFieldErrors(newErrors);
     setIsFormValid(Object.keys(newErrors).length === 0);
   }, [userInputs]);
-
-  const formatPhone = (phone: string): string => {
-    const numbersOnly = phone.replace(/\D/g, "").slice(0, 11);
-
-    if (numbersOnly.length <= 11) {
-      return numbersOnly.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{5})(\d)/, "$1-$2");
-    } else {
-      return numbersOnly.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{5})(\d)/, "$1-$2");
-    }
-  };
 
   const handleChangeInputs = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setUserInputs((prevUser) => ({
       ...prevUser,
-      [name]: name === "phone" ? formatPhone(value) : value,
+      [name]: value,
     }));
   };
 
@@ -87,7 +71,7 @@ const Register = () => {
 
     if (!isFormValid) return;
 
-    await register({ phone: userInputs.phone, name: userInputs.name, email: userInputs.email }, userInputs.password);
+    await register({ name: userInputs.name, email: userInputs.email }, userInputs.password);
   };
 
   return (
@@ -126,19 +110,6 @@ const Register = () => {
               status={wasSubmitted && fieldErrors.password ? "error" : ""}
             />
             {wasSubmitted && fieldErrors.password && <RegisterTextError>{fieldErrors.password}</RegisterTextError>}
-          </RegisterFormItem>
-
-          <RegisterFormItem>
-            <RegisterFormTitle htmlFor="phone">Telefone</RegisterFormTitle>
-            <RegisterFormInput
-              type="text"
-              name="phone"
-              placeholder="(11) 91234-5678"
-              value={userInputs.phone}
-              onChange={handleChangeInputs}
-              status={wasSubmitted && fieldErrors.phone ? "error" : ""}
-            />
-            {wasSubmitted && fieldErrors.phone && <RegisterTextError>{fieldErrors.phone}</RegisterTextError>}
           </RegisterFormItem>
 
           <RegisterFormButton variant="solid" color="blue" htmlType="submit" loading={loading}>
