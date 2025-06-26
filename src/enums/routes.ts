@@ -4,5 +4,4 @@ export enum RoutesEnum {
   Register = "/register",
 
   Painel = "/painel",
-  PhoneVerification = "/phone-verification",
 }
