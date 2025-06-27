@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@reduxjs/toolkit": "^2.8.2",
     "antd": "^5.26.1",
     "firebase": "^11.9.1",
     "gh-pages": "^6.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2",
     "styled-components": "^6.1.19"
   },
