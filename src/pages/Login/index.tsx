@@ -90,7 +90,7 @@ const Login = () => {
             {wasSubmitted && fieldErrors.password && <LoginTextError>{fieldErrors.password}</LoginTextError>}
           </LoginFormItem>
 
-          <LoginFormButton variant="solid" color="blue" htmlType="submit" loading={loading}>
+          <LoginFormButton variant="solid" color="default" htmlType="submit" loading={loading}>
             Entrar
           </LoginFormButton>
         </LoginForm>

@@ -112,7 +112,7 @@ const Register = () => {
             {wasSubmitted && fieldErrors.password && <RegisterTextError>{fieldErrors.password}</RegisterTextError>}
           </RegisterFormItem>
 
-          <RegisterFormButton variant="solid" color="blue" htmlType="submit" loading={loading}>
+          <RegisterFormButton variant="solid" color="default" htmlType="submit" loading={loading}>
             Cadastrar
           </RegisterFormButton>
         </RegisterForm>
