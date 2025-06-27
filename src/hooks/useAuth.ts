@@ -5,6 +5,8 @@ import { useState } from "react";
 import { auth } from "../services/firebase";
 import { RoutesEnum } from "../enums/routes";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { getFirebaseErrorMessage } from "../utils/firebaseErrors";
+import { FirebaseError } from "firebase/app";
 
 export const useAuth = (navigate: NavigateFunction) => {
   const [error, setError] = useState("");
@@ -16,11 +18,11 @@ export const useAuth = (navigate: NavigateFunction) => {
 
     try {
       return await fn();
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Erro desconhecido.");
+    } catch (err: unknown) {
+      if (err instanceof FirebaseError) {
+        const errorCode = err.code;
+        console.log(errorCode);
+        setError(getFirebaseErrorMessage(errorCode));
       }
       return null;
     } finally {
