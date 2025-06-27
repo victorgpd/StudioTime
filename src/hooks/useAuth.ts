@@ -4,13 +4,20 @@ import type { NavigateFunction } from "react-router-dom";
 import { useState } from "react";
 import { auth } from "../services/firebase";
 import { RoutesEnum } from "../enums/routes";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
-import { getFirebaseErrorMessage } from "../utils/firebaseErrors";
 import { FirebaseError } from "firebase/app";
+import { useAppDispatch } from "../redux/hook";
+import { useNotification } from "./useNotification";
+import { clearUser } from "../redux/globalReducer/slice";
+import { getFirebaseErrorMessage } from "../utils/firebaseErrors";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 
 export const useAuth = (navigate: NavigateFunction) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const notification = useNotification();
 
   const runAsync = async <T>(fn: () => Promise<T>): Promise<T | null> => {
     setLoading(true);
@@ -34,6 +41,7 @@ export const useAuth = (navigate: NavigateFunction) => {
     runAsync(async () => {
       await signInWithEmailAndPassword(auth, email, password);
 
+      notification.success("Seja bem-vindo!", "Usuário logado com sucesso.");
       navigate(RoutesEnum.Painel);
       return null;
     });
@@ -46,13 +54,17 @@ export const useAuth = (navigate: NavigateFunction) => {
         displayName: user.name,
       });
 
+      notification.success("Seja bem-vindo!", "Usuário cadastrado com sucesso.");
       navigate(RoutesEnum.Painel);
       return userCredential.user;
     });
 
   const logout = () =>
     runAsync(async () => {
+      dispatch(clearUser());
       await signOut(auth);
+
+      notification.success("Tchau!", "Usuário deslogado com sucesso.");
     });
 
   return { login, register, logout, error, loading };

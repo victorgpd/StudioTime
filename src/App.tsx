@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import { RouterProvider, createBrowserRouter, type RouteObject } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./services/firebase";
-
-import ProtectedRoute from "./components/ProtectedRoute";
-import { loggedScreensRoutes, screensRoutes } from "./routes/AppRoutes";
-import { useAppDispatch } from "./redux/hook";
-import { clearUser, setUser } from "./redux/globalReducer/slice";
 import ContainerPage from "./components/ContainerPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import { Spin } from "antd";
+import { auth } from "./services/firebase";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "./redux/hook";
+import { onAuthStateChanged } from "firebase/auth";
 import { LoadingOutlined } from "@ant-design/icons";
+import { clearUser, setUser } from "./redux/globalReducer/slice";
+import { NotificationProvider } from "./context/notificationContext";
+import { loggedScreensRoutes, screensRoutes } from "./routes/AppRoutes";
+import { RouterProvider, createBrowserRouter, type RouteObject } from "react-router-dom";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -41,14 +42,17 @@ function App() {
 
   const router = createBrowserRouter([...screensRoutes, ...routesLogged]);
 
-  if (loadingAuth)
-    return (
-      <ContainerPage alignItems="center" justifyContent="center">
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-      </ContainerPage>
-    );
-
-  return <RouterProvider router={router} />;
+  return (
+    <NotificationProvider>
+      {loadingAuth ? (
+        <ContainerPage alignItems="center" justifyContent="center">
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+        </ContainerPage>
+      ) : (
+        <RouterProvider router={router} />
+      )}
+    </NotificationProvider>
+  );
 }
 
 export default App;
