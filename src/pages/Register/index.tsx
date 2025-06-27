@@ -77,7 +77,7 @@ const Register = () => {
   return (
     <ContainerPage alignItems="center" justifyContent="center">
       <ContainerRegister>
-        <RegisterLogotipo src="/images/logo-horizontal.png" alt="Logotipo" />
+        <RegisterLogotipo src="/images/logo-vertical.png" alt="Logotipo" />
         <RegisterTitle>Cadastrar-se</RegisterTitle>
 
         <RegisterForm onSubmit={handleSubmit}>

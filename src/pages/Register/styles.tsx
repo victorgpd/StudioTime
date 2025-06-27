@@ -17,8 +17,8 @@ export const ContainerRegister = styled.div`
 `;
 
 export const RegisterLogotipo = styled.img`
-  width: 64px;
-  height: 64px;
+  height: 80px;
+  margin-bottom: 24px;
 `;
 
 export const RegisterTitle = styled.h1`

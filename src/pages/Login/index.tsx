@@ -73,7 +73,7 @@ const Login = () => {
   return (
     <ContainerPage alignItems="center" justifyContent="center">
       <ContainerLogin>
-        <LoginLogotipo src="/images/logo-horizontal.png" alt="Logotipo" />
+        <LoginLogotipo src="/images/logo-vertical.png" alt="Logotipo" />
 
         <LoginTitle>Entrar</LoginTitle>
 

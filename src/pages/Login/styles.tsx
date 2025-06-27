@@ -17,8 +17,8 @@ export const ContainerLogin = styled.div`
 `;
 
 export const LoginLogotipo = styled.img`
-  width: 64px;
-  height: 64px;
+  height: 80px;
+  margin-bottom: 24px;
 `;
 
 export const LoginTitle = styled.h1`
