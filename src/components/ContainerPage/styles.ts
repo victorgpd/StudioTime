@@ -6,7 +6,9 @@ interface ContainerProps {
   justifyContent?: "flex-start" | "space-between" | "space-around" | "space-evenly" | "center" | "flex-end" | undefined;
 }
 
-export const Container = styled.div<ContainerProps>`
+export const Container = styled.div.withConfig({
+  shouldForwardProp: (prop) => !["alignItems", "justifyContent", "gap"].includes(prop),
+})<ContainerProps>`
   width: 100%;
   height: 100%;
 
