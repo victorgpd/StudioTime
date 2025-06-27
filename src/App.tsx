@@ -7,6 +7,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { loggedScreensRoutes, screensRoutes } from "./routes/AppRoutes";
 import { useAppDispatch } from "./redux/hook";
 import { clearUser, setUser } from "./redux/globalReducer/slice";
+import ContainerPage from "./components/ContainerPage";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -38,7 +41,12 @@ function App() {
 
   const router = createBrowserRouter([...screensRoutes, ...routesLogged]);
 
-  if (loadingAuth) return <div>Carregando autenticação...</div>;
+  if (loadingAuth)
+    return (
+      <ContainerPage alignItems="center" justifyContent="center">
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+      </ContainerPage>
+    );
 
   return <RouterProvider router={router} />;
 }
