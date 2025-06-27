@@ -4,6 +4,7 @@ import type { RouteObject } from "react-router-dom";
 import Screen from "../components/Screen";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import PublicOnlyRoute from "../components/PublicOnlyRoute";
 
 export const screensRoutes: RouteObject[] = [
   {
@@ -17,11 +18,19 @@ export const screensRoutes: RouteObject[] = [
       },
       {
         path: RoutesEnum.Login,
-        element: <Login />,
+        element: (
+          <PublicOnlyRoute>
+            <Login />
+          </PublicOnlyRoute>
+        ),
       },
       {
         path: RoutesEnum.Register,
-        element: <Register />,
+        element: (
+          <PublicOnlyRoute>
+            <Register />
+          </PublicOnlyRoute>
+        ),
       },
     ],
   },
