@@ -1,3 +1,4 @@
+import ProtectedRoute from "./components/ProtectedRoute";
 import { loggedScreensRoutes, screensRoutes } from "./routes/AppRoutes";
 import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router-dom";
 
@@ -5,7 +6,7 @@ function App() {
   const routes: RouteObject[] = [...screensRoutes];
   const routesLogged: RouteObject[] = [...loggedScreensRoutes].map((route) => ({
     ...route,
-    // loader: verifyLoggedIn,
+    element: <ProtectedRoute>{route.element}</ProtectedRoute>,
   }));
 
   const router = createBrowserRouter([...routes, ...routesLogged]);
