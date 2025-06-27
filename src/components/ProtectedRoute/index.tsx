@@ -5,6 +5,7 @@ import { auth } from "../../services/firebase";
 import { RoutesEnum } from "../../enums/routes";
 import ContainerPage from "../ContainerPage";
 import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   if (loading)
     return (
       <ContainerPage alignItems="center" justifyContent="center">
-        <Spin size="large" />
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
       </ContainerPage>
     );
 
