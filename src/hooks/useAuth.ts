@@ -7,9 +7,10 @@ import { RoutesEnum } from "../enums/routes";
 import { FirebaseError } from "firebase/app";
 import { useAppDispatch } from "../redux/hook";
 import { useNotification } from "./useNotification";
-import { clearUser } from "../redux/globalReducer/slice";
+import { clearUser, setUser } from "../redux/globalReducer/slice";
 import { getFirebaseErrorMessage } from "../utils/firebaseErrors";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
+import { useDocument } from "./useDocument";
 
 export const useAuth = (navigate: NavigateFunction) => {
   const [error, setError] = useState("");
@@ -18,6 +19,8 @@ export const useAuth = (navigate: NavigateFunction) => {
   const dispatch = useAppDispatch();
 
   const notification = useNotification();
+
+  const { insertDocument } = useDocument();
 
   const runAsync = async <T>(fn: () => Promise<T>): Promise<T | null> => {
     setLoading(true);
@@ -39,8 +42,15 @@ export const useAuth = (navigate: NavigateFunction) => {
 
   const login = (email: string, password: string) =>
     runAsync(async () => {
-      await signInWithEmailAndPassword(auth, email, password);
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
 
+      dispatch(
+        setUser({
+          email: user.email!,
+          name: user.displayName!,
+          uid: user.uid,
+        })
+      );
       notification.success("Seja bem-vindo!", "Usuário logado com sucesso.");
       navigate(RoutesEnum.Painel);
       return null;
@@ -48,15 +58,29 @@ export const useAuth = (navigate: NavigateFunction) => {
 
   const register = (user: IUser, password: string) =>
     runAsync(async () => {
-      const userCredential = await createUserWithEmailAndPassword(auth, user.email, password);
+      const { user: userCredential } = await createUserWithEmailAndPassword(auth, user.email, password);
 
-      await updateProfile(userCredential.user, {
+      await updateProfile(userCredential, {
         displayName: user.name,
       });
 
+      await insertDocument("photographers", {
+        proprietary: userCredential.uid,
+        clients: [],
+        rehearsals: [],
+      });
+
+      dispatch(
+        setUser({
+          email: user.email,
+          name: user.name,
+          uid: userCredential.uid,
+        })
+      );
+
       notification.success("Seja bem-vindo!", "Usuário cadastrado com sucesso.");
       navigate(RoutesEnum.Painel);
-      return userCredential.user;
+      return userCredential;
     });
 
   const logout = () =>
