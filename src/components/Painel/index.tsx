@@ -1,12 +1,106 @@
-import Screen from "../Screen";
 import ContainerPage from "../ContainerPage";
 
-const Painel = ({ children }: { children?: React.ReactNode }) => {
+import { useMemo, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { RoutesEnum } from "../../enums/routes";
+import { CollapseButton, ContainerPainelPage, Menu, PainelContainer } from "./styles";
+import {
+  HomeOutlined,
+  UserOutlined,
+  UserAddOutlined,
+  UsergroupAddOutlined,
+  CameraOutlined,
+  PlusCircleOutlined,
+  FileTextOutlined,
+  LogoutOutlined,
+  PictureOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+
+const PainelComponent = ({ children, defaultSelectedKeys }: { children?: React.ReactNode; defaultSelectedKeys: string[] }) => {
+  const navigate = useNavigate();
+  const { logout } = useAuth(navigate);
+
+  const [collapsed, setCollapsed] = useState(true);
+
+  const menuItems = useMemo(
+    () => [
+      {
+        key: "home",
+        icon: <HomeOutlined />,
+        label: "Início",
+        onClick: () => navigate(RoutesEnum.Painel),
+      },
+      {
+        key: "clientes",
+        icon: <UserOutlined />,
+        label: "Clientes",
+        children: [
+          {
+            key: "clientes-lista",
+            icon: <UsergroupAddOutlined />,
+            label: "Lista de Clientes",
+            onClick: () => navigate(RoutesEnum.Clientes),
+          },
+          {
+            key: "novo-cliente",
+            icon: <UserAddOutlined />,
+            label: "Novo Cliente",
+            onClick: () => navigate(RoutesEnum.ClientesCadastrar),
+          },
+        ],
+      },
+      {
+        key: "ensaios",
+        icon: <CameraOutlined />,
+        label: "Ensaios",
+        children: [
+          {
+            key: "ensaios-lista",
+            icon: <FileTextOutlined />,
+            label: "Lista de Ensaios",
+            onClick: () => navigate(RoutesEnum.Ensaios),
+          },
+          {
+            key: "novo-ensaio",
+            icon: <PlusCircleOutlined />,
+            label: "Novo Ensaio",
+            onClick: () => navigate(RoutesEnum.EnsaiosCadastrar),
+          },
+        ],
+      },
+      {
+        key: "fotos",
+        icon: <PictureOutlined />,
+        label: "Fotos",
+        onClick: () => navigate(RoutesEnum.Fotos),
+      },
+      {
+        key: "sair",
+        icon: <LogoutOutlined />,
+        label: "Sair",
+        onClick: logout,
+        style: { color: "red" },
+      },
+    ],
+    [navigate, logout]
+  );
+
   return (
-    <Screen>
-      <ContainerPage>{children}</ContainerPage>
-    </Screen>
+    <ContainerPainelPage>
+      <PainelContainer $collapsed={collapsed}>
+        <CollapseButton onClick={() => setCollapsed(!collapsed)} $collapsed={collapsed}>
+          <span>
+            <RightOutlined />
+          </span>
+        </CollapseButton>
+        <Menu mode="inline" theme="dark" defaultSelectedKeys={defaultSelectedKeys} style={{ height: "100%", borderRight: 0 }} items={menuItems} />
+      </PainelContainer>
+
+      <ContainerPage paddingLeft={!collapsed}>{children}</ContainerPage>
+    </ContainerPainelPage>
   );
 };
 
-export default Painel;
+export default PainelComponent;

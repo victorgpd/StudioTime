@@ -5,6 +5,7 @@ import Screen from "../components/Screen";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import PublicOnlyRoute from "../components/PublicOnlyRoute";
+import Painel from "../pages/Painel";
 
 export const screensRoutes: RouteObject[] = [
   {
@@ -43,7 +44,31 @@ export const loggedScreensRoutes: RouteObject[] = [
     children: [
       {
         path: RoutesEnum.Painel,
-        element: <div>Painel</div>,
+        element: <Painel />,
+      },
+      {
+        path: RoutesEnum.Fotos,
+        element: <div>Fotos</div>,
+      },
+      {
+        path: RoutesEnum.FotosCadastrar,
+        element: <div>FotosCadastrar</div>,
+      },
+      {
+        path: RoutesEnum.Clientes,
+        element: <div>Clientes</div>,
+      },
+      {
+        path: RoutesEnum.ClientesCadastrar,
+        element: <div>ClientesCadastrar</div>,
+      },
+      {
+        path: RoutesEnum.Ensaios,
+        element: <div>Ensaios</div>,
+      },
+      {
+        path: RoutesEnum.EnsaiosCadastrar,
+        element: <div>EnsaiosCadastrar</div>,
       },
     ],
   },

@@ -4,18 +4,20 @@ interface ContainerProps {
   gap?: string;
   alignItems?: "flex-start" | "center" | "flex-end" | undefined;
   justifyContent?: "flex-start" | "space-between" | "space-around" | "space-evenly" | "center" | "flex-end" | undefined;
+  paddingLeft?: boolean;
 }
 
 export const Container = styled.div.withConfig({
-  shouldForwardProp: (prop) => !["alignItems", "justifyContent", "gap"].includes(prop),
+  shouldForwardProp: (prop) => !["alignItems", "justifyContent", "gap", "paddingLeft"].includes(prop),
 })<ContainerProps>`
   width: 100%;
   height: 100%;
+  display: flex;
+
+  ${({ gap }) => gap && `gap: ${gap};`}
+  ${({ alignItems }) => alignItems && `align-items: ${alignItems};`}
+  ${({ justifyContent }) => justifyContent && `justify-content: ${justifyContent};`}
 
   padding: 15px;
-
-  ${(props) => `gap: ${props.gap}`};
-  display: flex;
-  ${(props) => `align-items: ${props.alignItems}`};
-  ${(props) => `justify-content: ${props.justifyContent}`};
+  ${({ paddingLeft }) => paddingLeft && `padding-left: 246px;`}
 `;
