@@ -19,5 +19,10 @@ export const Container = styled.div.withConfig({
   ${({ justifyContent }) => justifyContent && `justify-content: ${justifyContent};`}
 
   padding: 15px;
-  ${({ paddingLeft }) => paddingLeft && `padding-left: 246px;`}
+  ${({ paddingLeft }) => paddingLeft && `padding-left: 261px;`}
+
+  position: relative;
+  transition: padding-left 0.3s ease;
+
+  overflow-y: auto;
 `;

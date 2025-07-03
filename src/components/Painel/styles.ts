@@ -10,20 +10,24 @@ export const ContainerPainelPage = styled.div`
 `;
 
 interface PainelProps {
-  $collapsed?: boolean;
+  $resize: boolean;
+  $collapsed: boolean;
 }
 
 export const PainelContainer = styled.aside<PainelProps>`
-  width: 246px;
+  width: 100%;
+  max-width: 246px;
   height: 100%;
   padding-top: 50px;
-  transition: transform 0.3s ease;
+
   background-color: #2e2e2e;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 
   display: flex;
-  position: relative;
+  position: fixed;
 
+  z-index: 1000;
+  transition: transform 0.3s ease;
   transform: ${({ $collapsed }) => ($collapsed ? "translateX(0)" : "translateX(-100%)")};
 `;
 
@@ -32,7 +36,7 @@ export const CollapseButton = styled.button<{ $collapsed: boolean }>`
   top: 50%;
   right: -25px;
   transform: translateY(-50%);
-  z-index: 1;
+  z-index: 1000;
 
   width: 32px;
   height: 64px;
@@ -102,4 +106,18 @@ export const Menu = styled(MenuAntd)`
   .ant-menu-inline {
     background-color: #262626 !important;
   }
+`;
+
+export const ContainerBackdrop = styled.div<{ $collapsed: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: ${({ $collapsed }) => ($collapsed ? 1 : 0)};
+  pointer-events: ${({ $collapsed }) => ($collapsed ? "auto" : "none")};
+  transition: opacity 0.3s ease;
 `;

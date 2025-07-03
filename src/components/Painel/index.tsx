@@ -1,10 +1,10 @@
 import ContainerPage from "../ContainerPage";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { RoutesEnum } from "../../enums/routes";
-import { CollapseButton, ContainerPainelPage, Menu, PainelContainer } from "./styles";
+import { CollapseButton, ContainerBackdrop, ContainerPainelPage, Menu, PainelContainer } from "./styles";
 import {
   HomeOutlined,
   UserOutlined,
@@ -23,6 +23,8 @@ const PainelComponent = ({ children, defaultSelectedKeys }: { children?: React.R
   const { logout } = useAuth(navigate);
 
   const [collapsed, setCollapsed] = useState(true);
+  const [resizePage, setResizePage] = useState(false);
+  const [widthPage, setWidthPage] = useState(window.innerWidth);
 
   const menuItems = useMemo(
     () => [
@@ -87,9 +89,23 @@ const PainelComponent = ({ children, defaultSelectedKeys }: { children?: React.R
     [navigate, logout]
   );
 
+  useEffect(() => {
+    const handleResize = () => setWidthPage(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (widthPage < 768) {
+      setResizePage(true);
+    } else {
+      setResizePage(false);
+    }
+  }, [widthPage]);
+
   return (
     <ContainerPainelPage>
-      <PainelContainer $collapsed={collapsed}>
+      <PainelContainer $collapsed={collapsed} $resize={resizePage}>
         <CollapseButton onClick={() => setCollapsed(!collapsed)} $collapsed={collapsed}>
           <span>
             <RightOutlined />
@@ -98,7 +114,10 @@ const PainelComponent = ({ children, defaultSelectedKeys }: { children?: React.R
         <Menu mode="inline" theme="dark" defaultSelectedKeys={defaultSelectedKeys} style={{ height: "100%", borderRight: 0 }} items={menuItems} />
       </PainelContainer>
 
-      <ContainerPage paddingLeft={!collapsed}>{children}</ContainerPage>
+      <ContainerPage paddingLeft={collapsed && !resizePage ? true : false}>
+        <ContainerBackdrop $collapsed={collapsed && resizePage} onClick={() => setCollapsed(false)}></ContainerBackdrop>
+        {children}
+      </ContainerPage>
     </ContainerPainelPage>
   );
 };
